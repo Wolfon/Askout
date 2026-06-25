@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Makes the page scale correctly on phones -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Would You Like To Hang Out? ❤️</title>
+
+    <style>
+
+        /* Entire page */
+        body {
+            margin: 0;
+            overflow: hidden; /* Prevents scrollbars from floating hearts */
+            background: pink;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Floating heart style */
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            color: red;
+            animation: float 6s linear forwards;
+        }
+
+        /* Floating animation */
+        @keyframes float {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateY(-110vh);
+                opacity: 0;
+            }
+        }
+
+        /* Main white box */
+        .box {
+            background: white;
+            width: 650px;
+            margin: 60px auto;
+            padding: 20px;
+            border: 4px solid red;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* All buttons */
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        /* Date and time input boxes */
+        input {
+            padding: 10px;
+            font-size: 18px;
+            margin: 10px;
+        }
+
+        /* Hidden until needed */
+        #dateSection,
+        #timeSection,
+        #goodbyeButton {
+            display: none;
+        }
+
+        /* Anime GIF size */
+        #animeGif {
+            width: 250px;
+            border-radius: 15px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+
+    <!-- Main GIF -->
+    <img
+            id="animeGif"
+            src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcTJpbWhqdmY0MzQ0dDNoOTAya2F6ZGR0amNzN3QwbGs1d3RsbXk3aSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/R8AXIi6qw6alK9QdLp/giphy.gif"
+            alt="Anime GIF">
+
+    <!-- Main text -->
+    <h1 id="question">
+        Would You Like To Hang Out With Me? ❤️
+    </h1>
+
+    <!-- Yes / No buttons -->
+    <div id="mainButtons">
+
+        <button id="yesButton" onclick="yesClicked()">
+            Yes ❤️
+        </button>
+
+        <button id="noButton" onclick="noClicked()">
+            No 💔
+        </button>
+
+    </div>
+
+    <!-- Date selection -->
+    <div id="dateSection">
+
+        <input type="date" id="datePicker">
+
+        <br>
+
+        <button onclick="chooseDate()">
+            This is the date I want
+        </button>
+
+    </div>
+
+    <!-- Time selection -->
+    <div id="timeSection">
+
+        <input type="time" id="timePicker">
+
+        <br>
+
+        <button onclick="chooseTime()">
+            Thanks for choosing
+        </button>
+
+    </div>
+
+    <!-- Final goodbye button -->
+    <button id="goodbyeButton" onclick="goodbye()">
+        Goodbye 👋
+    </button>
+
+</div>
+
+<script>
+
+    /* =====================================================
+       FLOATING HEARTS
+       ===================================================== */
+
+    function createHeart() {
+
+        // Create a new heart element
+        const heart = document.createElement("div");
+
+        heart.innerHTML = "❤️";
+        heart.classList.add("heart");
+
+        // Random horizontal position
+        heart.style.left = Math.random() * 100 + "vw";
+
+        // Random size
+        heart.style.fontSize =
+            (20 + Math.random() * 40) + "px";
+
+        // Add heart to page
+        document.body.appendChild(heart);
+
+        // Delete heart after animation finishes
+        setTimeout(() => {
+            heart.remove();
+        }, 6000);
+    }
+
+    // Create a heart every 300ms
+    setInterval(createHeart, 300);
+
+
+
+    /* =====================================================
+       STORY PROGRESSION SYSTEM
+       ===================================================== */
+
+    /*
+        Stage 1 = Initial question
+
+        User presses NO:
+        Stage becomes 2
+
+        User presses YES after that:
+        Stage becomes 3
+
+        User presses YES again:
+        Final rejection screen
+    */
+
+    let stage = 1;
+
+
+
+    /* =====================================================
+       YES BUTTON
+       ===================================================== */
+
+    function yesClicked() {
+
+        // First yes immediately goes to date picker
+        if (stage === 1) {
+
+            showDatePicker();
+        }
+
+        // User changed their mind
+        else if (stage === 2) {
+
+            stage = 3;
+
+            document.getElementById("animeGif").src =
+                "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExdW1iaXF3ZjFxYW5rbHcxb2w4Y3hnMXplazh0ZHJidHF4dzdmbnBrOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gKT7JnuWmrLwQNLaR7/giphy.gif";
+
+            document.getElementById("question").innerHTML =
+                "Really sure, sure?? 🥺";
+
+            moveYesButton();
+        }
+
+        // Final rejection path
+        else if (stage === 3) {
+
+            document.getElementById("animeGif").src =
+                "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdGNhZml5bXM5bmNneDY0amNybjhpYTJ3eWRzeDloOTE5YnhvMXNqayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/VelWewgR6CpNK/giphy.gif";
+
+            document.getElementById("question").innerHTML =
+                "Well... okay... Have a good day then 💔";
+
+            const yesButton =
+                document.getElementById("yesButton");
+
+            // Put button back in normal position
+            yesButton.style.position = "static";
+            yesButton.style.left = "";
+            yesButton.style.top = "";
+
+            // Turn Yes button into Goodbye button
+            yesButton.innerHTML = "Goodbye 👋";
+            yesButton.onclick = goodbye;
+
+            // Hide No button
+            document.getElementById("noButton").style.display =
+                "none";
+        }
+    }
+
+
+
+    /* =====================================================
+       NO BUTTON
+       ===================================================== */
+
+    function noClicked() {
+
+        if (stage === 1) {
+
+            stage = 2;
+
+            document.getElementById("animeGif").src =
+                "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTdtNm4zMWt1cTUwaTVkMzBiYWRyYWhwMzc3azd5dWVjZzU0ZTVxOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/CFJzEKHnTknlqG01Hr/giphy.gif";
+
+            document.getElementById("question").innerHTML =
+                "Are you sure? 😢";
+
+            moveYesButton();
+        }
+
+        else if (stage === 2 || stage === 3) {
+
+            showDatePicker();
+        }
+    }
+
+
+
+    /* =====================================================
+       MOVING YES BUTTON
+       ===================================================== */
+
+    function moveYesButton() {
+
+        const yesButton =
+            document.getElementById("yesButton");
+
+        yesButton.style.position = "fixed";
+
+        // Random X coordinate
+        const x =
+            Math.random() *
+            (window.innerWidth - yesButton.offsetWidth);
+
+        // Random Y coordinate
+        const y =
+            Math.random() *
+            (window.innerHeight - yesButton.offsetHeight);
+
+        yesButton.style.left = x + "px";
+        yesButton.style.top = y + "px";
+    }
+
+
+
+    /* =====================================================
+       DATE PICKER
+       ===================================================== */
+
+    function showDatePicker() {
+
+        document.getElementById("animeGif").src =
+            "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdWZ6dGNiZzVlZWJqcG1oM2N2aGx2NmlzbGQwM3llOHVhbWlwZml6ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/vkb4aEjq5TqqQ/giphy.gif";
+
+        document.getElementById("question").innerHTML =
+            "That's great! When do you wanna do it? ❤️";
+
+        document.getElementById("mainButtons").style.display =
+            "none";
+
+        document.getElementById("dateSection").style.display =
+            "block";
+    }
+
+
+
+    /* =====================================================
+       DATE CHOSEN
+       ===================================================== */
+
+    function chooseDate() {
+
+        const date =
+            document.getElementById("datePicker").value;
+
+        if (!date) {
+            alert("Please choose a date.");
+            return;
+        }
+
+        document.getElementById("animeGif").src =
+            "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXBqNGU5b2VsZ2pqd3g2OGkzOGhlam1rYXRvMW14aDRleWc1dzU2OCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kWNpr7p1Aao3G86VuJ/giphy.gif";
+
+        document.getElementById("question").innerHTML =
+            "Great! What about the time? ⏰";
+
+        document.getElementById("dateSection").style.display =
+            "none";
+
+        document.getElementById("timeSection").style.display =
+            "block";
+    }
+
+
+
+    /* =====================================================
+       TIME CHOSEN
+       ===================================================== */
+
+    function chooseTime() {
+
+        const date =
+            document.getElementById("datePicker").value;
+
+        const time =
+            document.getElementById("timePicker").value;
+
+        if (!time) {
+            alert("Please choose a time.");
+            return;
+        }
+
+        document.getElementById("animeGif").src =
+            "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExcnVxcWx5M2IwcWlpN3lqdXlseTN3cjVjaHdlODRkb25iaWViY2s4NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3bqtLDeiDtwhq/giphy.gif";
+
+        document.getElementById("question").innerHTML =
+            "Thanks for accepting it! ❤️<br><br>" +
+            "Date: " + date +
+            "<br>Time: " + time +
+            "<br><br>I'll tell you if I'm available on that date and time ❤️" +
+            "<br><br>(This website can't actually send me the date and time. Send me a screenshot 🌸)";
+
+        document.getElementById("timeSection").style.display =
+            "none";
+
+        document.getElementById("goodbyeButton").style.display =
+            "inline-block";
+    }
+
+
+
+    /* =====================================================
+       GOODBYE SCREEN
+       ===================================================== */
+
+    function goodbye() {
+
+        document.body.innerHTML =
+            "<h1 style='text-align:center;margin-top:200px;'>Goodbye ❤️</h1>";
+    }
+
+</script>
+
+
+
+<!-- Background music -->
+<audio id="bgMusic" loop>
+    <source src="Katawa.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+    /*
+        Browsers block autoplay music.
+
+        The first click anywhere on the page
+        starts the music.
+    */
+
+    document.addEventListener(
+        "click",
+        function () {
+            document.getElementById("bgMusic").play();
+        },
+        { once: true }
+    );
+
+</script>
+
+</body>
+</html>
